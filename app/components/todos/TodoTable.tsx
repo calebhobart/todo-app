@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Table,
   TableBody,
@@ -32,14 +32,8 @@ export default function TodoTable({ listId }: TodoTableProps) {
   const [newTodoTitle, setNewTodoTitle] = useState('')
   const [loading, setLoading] = useState(false)
   
-  // Fetch todos when component mounts or listId changes
-  useEffect(() => {
-    if (listId) {
-      fetchTodos()
-    }
-  }, [listId]) // Add listId to dependency array
-
-  const fetchTodos = async () => {
+  // Move fetchTodos into useCallback to avoid dependency issues
+  const fetchTodos = useCallback(async () => {
     if (!listId) return
     
     setLoading(true)
@@ -59,7 +53,12 @@ export default function TodoTable({ listId }: TodoTableProps) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [listId]) // Add listId as dependency
+
+  // Now fetchTodos is stable and can be used in useEffect
+  useEffect(() => {
+    fetchTodos()
+  }, [fetchTodos]) // Add fetchTodos as dependency
 
   const handleToggle = async (todoId: string) => {
     try {
