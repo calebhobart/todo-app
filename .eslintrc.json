@@ -3,5 +3,9 @@
   "rules": {
     "react-hooks/exhaustive-deps": "warn",
     "react/display-name": "off"
-  }
+  },
+  "ignorePatterns": [
+    "lib/python*/**/*",
+    "node_modules/**/*"
+  ]
 }

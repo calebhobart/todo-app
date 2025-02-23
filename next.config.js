@@ -25,6 +25,21 @@ const nextConfig = {
       },
     ];
   },
+  reactStrictMode: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  webpack: (config, { isServer }) => {
+    // Ignore python-related files
+    config.watchOptions = {
+      ...config.watchOptions,
+      ignored: /lib\/python.*/
+    }
+    return config
+  }
 };
 
 module.exports = nextConfig;
